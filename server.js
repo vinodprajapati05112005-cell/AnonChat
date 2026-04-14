@@ -15,6 +15,7 @@ const MAX_MESSAGE_LENGTH = 500;
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/health', (_req, res) => res.status(200).send('ok'));
 
 // rooms: { code: { users: [socketId, ...] } }
