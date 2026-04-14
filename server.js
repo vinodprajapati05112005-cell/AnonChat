@@ -133,7 +133,11 @@ io.on('connection', (socket) => {
       type: 'text',
       text: safeText,
       senderId: socket.id,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: new Date().toLocaleTimeString('en-IN', {
+  timeZone: 'Asia/Kolkata',
+  hour: '2-digit',
+  minute: '2-digit'
+})
     });
   });
 
@@ -151,7 +155,11 @@ io.on('connection', (socket) => {
       dataUrl,
       name,
       senderId: socket.id,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: new Date().toLocaleTimeString('en-IN', {
+  timeZone: 'Asia/Kolkata',
+  hour: '2-digit',
+  minute: '2-digit'
+})
     });
   });
 
