@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AnonChat</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="toast" class="toast" aria-live="polite"></div>
+
+<!-- ===== HOME SCREEN ===== -->
+<div id="home-screen" class="screen active">
+  <div class="home-card">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <path class="logo-bubble" d="M16 14h30a10 10 0 0 1 10 10v16a10 10 0 0 1-10 10H30l-12 10v-10H16a10 10 0 0 1-10-10V24a10 10 0 0 1 10-10z"/>
+        <rect class="logo-lock-body" x="28" y="30" width="12" height="12" rx="3"/>
+        <path class="logo-lock-shackle" d="M31 30v-3a4 4 0 1 1 8 0v3"/>
+        <circle class="logo-lock-hole" cx="34" cy="36" r="1.6"/>
+      </svg>
+      <span class="logo-text">AnonChat</span>
+    </div>
+    <p class="tagline">Private disposable rooms. No login. No history.</p>
+
+    <!-- Permanent code display -->
+    <div class="section">
+      <p class="section-label">Your permanent code</p>
+      <div class="code-display">
+        <span id="my-code">------</span>
+        <button id="copy-btn" class="icon-btn" title="Copy" aria-label="Copy code">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
+      </div>
+      <p class="hint-text">Share this code with a friend. You're already waiting in your room.</p>
+    </div>
+
+    <div class="divider"><span>or join a friend</span></div>
+
+    <!-- Join by code -->
+    <div class="section">
+      <p class="section-label">Enter friend's code</p>
+      <input id="join-input" type="text" maxlength="6" placeholder="e.g. 5FG86F"
+        autocomplete="off" autocapitalize="characters" spellcheck="false"/>
+      <button id="join-btn" class="btn secondary">Join Room</button>
+    </div>
+
+    <div id="recent-section" class="section recent-section hidden">
+      <div class="recent-header">
+        <span class="section-label">Recent codes</span>
+        <button id="clear-recent-btn" class="text-btn" type="button">Clear</button>
+      </div>
+      <div id="recent-codes" class="recent-codes"></div>
+    </div>
+
+    <!-- Active rooms -->
+    <button id="view-rooms-btn" class="btn ghost">View Active Rooms</button>
+  </div>
+
+  <!-- Active rooms panel -->
+  <div id="rooms-panel" class="rooms-panel hidden">
+    <div class="rooms-panel-header">
+      <span>Waiting Rooms</span>
+      <button id="close-rooms-btn" class="icon-btn" aria-label="Close">X</button>
+    </div>
+    <ul id="rooms-list" class="rooms-list">
+      <li class="no-rooms">No one waiting yet.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== CHAT SCREEN ===== -->
+<div id="chat-screen" class="screen">
+  <div class="chat-wrapper">
+
+    <header class="chat-header">
+      <div class="header-left">
+        <span class="header-logo">
+          <svg class="logo-mark small" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="logo-bubble" d="M16 14h30a10 10 0 0 1 10 10v16a10 10 0 0 1-10 10H30l-12 10v-10H16a10 10 0 0 1-10-10V24a10 10 0 0 1 10-10z"/>
+            <rect class="logo-lock-body" x="28" y="30" width="12" height="12" rx="3"/>
+            <path class="logo-lock-shackle" d="M31 30v-3a4 4 0 1 1 8 0v3"/>
+            <circle class="logo-lock-hole" cx="34" cy="36" r="1.6"/>
+          </svg>
+        </span>
+        <div>
+          <div class="header-title">AnonChat</div>
+          <div id="status-bar" class="status waiting">Waiting for friend...</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="room-badge">
+          <span id="chat-room-code">------</span>
+          <button id="chat-copy-btn" class="icon-btn small" title="Copy" aria-label="Copy code">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+        </div>
+        <button id="new-chat-btn" class="btn danger small">Leave</button>
+      </div>
+    </header>
+
+    <main id="messages" class="messages" aria-live="polite"></main>
+
+    <!-- Emoji picker panel -->
+    <div id="emoji-panel" class="emoji-panel hidden"></div>
+
+    <footer class="chat-footer">
+      <!-- Image upload -->
+      <label class="icon-btn footer-icon" title="Send image" aria-label="Send image">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <input id="img-input" type="file" accept="image/*" hidden/>
+      </label>
+      <!-- Emoji toggle -->
+      <button id="emoji-btn" class="icon-btn footer-icon" title="Emoji" aria-label="Emoji">:)</button>
+      <!-- Text input -->
+      <input id="msg-input" type="text" placeholder="Type a message..." autocomplete="off" maxlength="500" disabled/>
+      <!-- Send -->
+      <button id="send-btn" class="send-btn" disabled aria-label="Send">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </footer>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>
+</body>
+</html>
