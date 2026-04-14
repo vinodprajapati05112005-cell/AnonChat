@@ -57,6 +57,17 @@ const RECENT_LIMIT = 8;
 renderRecentCodes();
 clearRecentBtn.addEventListener('click', clearRecentCodes);
 
+// ===== VIEWPORT HEIGHT FIX (MOBILE) =====
+function setAppHeight() {
+  document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+}
+setAppHeight();
+window.addEventListener('resize', setAppHeight);
+window.addEventListener('orientationchange', setAppHeight);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', setAppHeight);
+}
+
 // Block right-click (prevent image save via context menu)
 document.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -378,6 +389,11 @@ function enableInput(on) {
   sendBtn.disabled = !on;
   if (on) msgInput.focus();
 }
+
+msgInput.addEventListener('focus', () => {
+  setAppHeight();
+  setTimeout(scrollBottom, 50);
+});
 
 function addTextBubble(text, isMine, time) {
   const row = document.createElement('div');

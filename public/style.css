@@ -18,6 +18,7 @@
   --radius: 16px;
   --shadow: 0 14px 40px rgba(15, 23, 42, 0.12);
   --ring: 0 0 0 3px rgba(15, 118, 110, 0.15);
+  --app-height: 100vh;
 }
 
 html, body {
@@ -50,14 +51,15 @@ body::before {
 @media print { body { display: none !important; } }
 
 /* ===== SCREENS ===== */
-.screen { display: none; height: 100vh; width: 100%; }
+.screen { display: none; height: var(--app-height); width: 100%; }
 .screen.active { display: flex; }
 
 /* ===== HOME ===== */
 #home-screen {
   align-items: center; justify-content: center;
   flex-direction: column; gap: 16px;
-  padding: 20px; overflow-y: auto;
+  padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
+  overflow-y: auto;
 }
 
 .home-card {
@@ -248,13 +250,13 @@ input[type="text"]::placeholder { text-transform: none; letter-spacing: normal; 
 /* ===== CHAT SCREEN ===== */
 #chat-screen {
   align-items: center; justify-content: center;
-  padding: 20px;
+  padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
 }
 
 .chat-wrapper {
   display: flex; flex-direction: column;
   width: 100%; max-width: 680px;
-  height: calc(100vh - 40px);
+  height: calc(var(--app-height) - 40px);
   background: var(--white);
   box-shadow: var(--shadow);
   border-radius: var(--radius);
@@ -272,7 +274,7 @@ input[type="text"]::placeholder { text-transform: none; letter-spacing: normal; 
 
 .chat-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px; background: var(--white);
+  padding: calc(14px + env(safe-area-inset-top)) 20px 14px; background: var(--white);
   border-bottom: 1px solid var(--accent-light); flex-shrink: 0;
 }
 
@@ -305,6 +307,9 @@ input[type="text"]::placeholder { text-transform: none; letter-spacing: normal; 
 .messages {
   flex: 1; overflow-y: auto; padding: 20px 16px;
   display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .system-msg {
@@ -376,7 +381,8 @@ input[type="text"]::placeholder { text-transform: none; letter-spacing: normal; 
 /* ===== FOOTER ===== */
 .chat-footer {
   display: flex; align-items: center; gap: 8px;
-  padding: 12px 14px; border-top: 1px solid var(--accent-light);
+  padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--accent-light);
   background: var(--white); flex-shrink: 0;
 }
 
@@ -458,5 +464,5 @@ input[type="text"]::placeholder { text-transform: none; letter-spacing: normal; 
   .bubble { max-width: 85%; }
   .btn.danger.small { font-size: 0.75rem; padding: 7px 10px; }
   #chat-screen { padding: 0; }
-  .chat-wrapper { height: 100vh; border-radius: 0; }
+  .chat-wrapper { height: var(--app-height); border-radius: 0; }
 }
